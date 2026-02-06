@@ -1,0 +1,30 @@
+### Sem API Key - deve dar erro 401
+POST http://localhost:3000/scores
+Content-Type: application/json
+
+{
+  "playerName": "Gabriel",
+  "difficulty": "beginner",
+  "timeInSeconds": 45,
+  "boardConfig": {
+    "rows": 8,
+    "cols": 8,
+    "mines": 10
+  }
+}
+
+### Com API Key - deve funcionar
+POST http://localhost:3000/scores
+Content-Type: application/json
+x-api-key: {{$dotenv API_SECRET_KEY}}
+
+{
+  "playerName": "Gabriel",
+  "difficulty": "beginner", 
+  "timeInSeconds": 45,
+  "boardConfig": {
+    "rows": 8,
+    "cols": 8,
+    "mines": 10
+  }
+}
