@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { validate } from 'class-validator';
@@ -27,15 +29,29 @@ import { ScoresModule } from './scores/scores.module';
         return validatedConfig;
       },
     }),
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 60,
+          limit: 30,
+        },
+      ],
+    }),
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: 'leaderboard.db',
+      database: process.env.DB_NAME ?? 'leaderboard.db',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true, // APENAS para desenvolvimento
+      synchronize: process.env.DB_SYNCHRONIZE !== 'false',
     }),
     ScoresModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}

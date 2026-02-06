@@ -7,12 +7,10 @@ import {
   Query,
   ValidationPipe,
   BadRequestException,
-  UseGuards,
 } from '@nestjs/common';
 import { ScoresService } from './scores.service';
 import { CreateScoreDto } from './dto/create-score.dto';
 import { LeaderboardQueryDto } from './dto/leaderboard-query.dto';
-import { ApiKeyGuard } from '../guards/api-key.guard';
 import { DIFFICULTY } from '../../constants';
 
 type Difficulty = (typeof DIFFICULTY)[keyof typeof DIFFICULTY];
@@ -22,7 +20,6 @@ export class ScoresController {
   constructor(private readonly scoresService: ScoresService) {}
 
   @Post()
-  @UseGuards(ApiKeyGuard) // API Key apenas para criar scores
   async createScore(@Body(ValidationPipe) createScoreDto: CreateScoreDto) {
     return this.scoresService.createScore(createScoreDto);
   }

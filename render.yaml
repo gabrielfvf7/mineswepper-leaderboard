@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: minesweeper-leaderboard-api
+    env: node
+    plan: free
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: node dist/main.js
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_NAME
+        value: /var/data/leaderboard.db
+      - key: DB_SYNCHRONIZE
+        value: 'true'
+      - key: CORS_ORIGINS
+        value: https://gabrielfvf7.github.io
+    disk:
+      name: data
+      mountPath: /var/data
+      sizeGB: 1
