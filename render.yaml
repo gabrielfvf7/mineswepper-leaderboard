@@ -11,7 +11,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: DB_NAME
-        value: /var/data/leaderboard.db
+        value: /var/data/leaderboard-prod.db
       - key: DB_SYNCHRONIZE
         value: 'true'
       - key: CORS_ORIGINS
